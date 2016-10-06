@@ -78,6 +78,20 @@ const activityDetector = ({
     };
 
     /**
+     * Adds event listener
+     * @param {any} anyTarget target to add event listener to
+     * @param {string} strEventName event name
+     * @param {function} funcHandler event handler
+     */
+    const addListener = (anyTarget, strEventName, funcHandler) => {
+        if (anyTarget.addEventListener) {
+            anyTarget.addEventListener(strEventName, funcHandler);
+        } else {
+            anyTarget.attachEvent(strEventName, funcHandler);
+        }
+    };
+
+    /**
      * Starts the activity detector with the given state.
      * @param {string} firstState 'iddle' or 'active' (default)
      */
@@ -85,13 +99,13 @@ const activityDetector = ({
         setState(firstState);
 
         activityEvents.forEach(eventName =>
-            window.addEventListener(eventName, handleUserActivityEvent));
+            addListener(window, eventName, handleUserActivityEvent));
 
         inactivityEvents.forEach(eventName =>
-            window.addEventListener(eventName, handleUserInactivityEvent));
+            addListener(window, eventName, handleUserInactivityEvent));
 
         if (visibilityChangeEvent) {
-            document.addEventListener(visibilityChangeEvent, handleVisibilityChangeEvent);
+            addListener(document, visibilityChangeEvent, handleVisibilityChangeEvent);
         }
     };
 
@@ -105,6 +119,20 @@ const activityDetector = ({
     };
 
     /**
+     * Removes event listener
+     * @param {any} anyTarget target to remove event listener from
+     * @param {string} strEventName event name
+     * @param {function} funcHandler event handler
+     */
+    const removeListener = (anyTarget, strEventName, funcHandler) => {
+        if (anyTarget.removeEventListener) {
+            anyTarget.removeEventListener(strEventName, funcHandler);
+        } else {
+            anyTarget.detachEvent(strEventName, funcHandler);
+        }
+    };
+
+    /**
      * Stops the activity detector and clean the listeners
      */
     const stop = () => {
@@ -114,13 +142,13 @@ const activityDetector = ({
         clearTimeout(timer);
 
         activityEvents.forEach(eventName =>
-            window.removeEventListener(eventName, handleUserActivityEvent));
+            removeListener(window, eventName, handleUserActivityEvent));
 
         inactivityEvents.forEach(eventName =>
-            window.removeEventListener(eventName, handleUserInactivityEvent));
+            removeListener(window, eventName, handleUserInactivityEvent));
 
         if (visibilityChangeEvent) {
-            document.removeEventListener(visibilityChangeEvent, handleVisibilityChangeEvent);
+            removeListener(document, visibilityChangeEvent, handleVisibilityChangeEvent);
         }
     };
 
