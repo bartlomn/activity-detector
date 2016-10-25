@@ -43,7 +43,8 @@ For example:
 ```javascript
 const activityDetector = createActivityDetector({
 	timeToIdle: 20000, // wait 20s of inactivity to consider the user is idle
-	autoInit: false // I don't want to start the activity detector yet.
+	autoInit: false, // I don't want to start the activity detector yet.
+    useVisibilityChange: false // do not fire inactivity event if user switches browser tab
 });
 
 activityDetector.on('idle', handleUserIdle);

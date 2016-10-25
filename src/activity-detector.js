@@ -45,6 +45,7 @@ const activityDetector = ({
     timeToIdle = 30000,
     initialState = DEFAULT_INITIAL_STATE,
     autoInit = true,
+    useVisibilityChange = true,
 } = {}) => {
 
     const listeners = {[ACTIVE]: [], [IDLE]: []};
@@ -87,7 +88,7 @@ const activityDetector = ({
         if (anyTarget.addEventListener) {
             anyTarget.addEventListener(strEventName, funcHandler);
         } else {
-            anyTarget.attachEvent(strEventName, funcHandler);
+            anyTarget.attachEvent(`on${strEventName}`, funcHandler);
         }
     };
 
@@ -104,7 +105,7 @@ const activityDetector = ({
         inactivityEvents.forEach(eventName =>
             addListener(window, eventName, handleUserInactivityEvent));
 
-        if (visibilityChangeEvent) {
+        if (visibilityChangeEvent && useVisibilityChange) {
             addListener(document, visibilityChangeEvent, handleVisibilityChangeEvent);
         }
     };
@@ -128,7 +129,7 @@ const activityDetector = ({
         if (anyTarget.removeEventListener) {
             anyTarget.removeEventListener(strEventName, funcHandler);
         } else {
-            anyTarget.detachEvent(strEventName, funcHandler);
+            anyTarget.detachEvent(`on${strEventName}`, funcHandler);
         }
     };
 
